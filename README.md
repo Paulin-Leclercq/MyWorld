@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to MyWorld 👋</h1>
 
-> The project is a random 3D map generator where you can travel around
+> This project is a random 3D map generator where you can travel around
 > and edit the world with a brush of a size you want.
 > For the moment only the lowering tool is available but others will be available soon.
 > Be careful, the launch map function is not working!
@@ -26,6 +26,14 @@ make run
 👤 **Paulin Leclercq**
 
 * LinkedIn: [@paulinleclercq](https://www.linkedin.com/in/paulinleclercq/)
+
+👤 **Edgar Lecueyr**
+
+* LinkedIn: [@edgar-lecuyer-240419232](https://www.linkedin.com/in/edgar-lecuyer-240419232/)
+
+👤 **Quentin Desmettre**
+
+* LinkedIn: [@quentin-desmettre](https://www.linkedin.com/in/quentin-desmettre/)
 
 ## Show your support
 
