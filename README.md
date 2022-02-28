@@ -7,7 +7,7 @@
 
 ## Demo
 
-![Alt Text](https://https://github.com/Paulin-Leclercq/MyWorld-in-progress-/blob/main/world.gif)
+![Alt Text](https://github.com/Paulin-Leclercq/MyWorld-in-progress-/blob/main/world.gif)
 
 ## Install
 
