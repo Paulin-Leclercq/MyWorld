@@ -8,22 +8,22 @@
 #include "menus.h"
 #include "my.h"
 
-void scale_map_create(map_create_t *mc, sfVector2f win_size)
+void scale_map_create(map_create_t *mc, sfVector2f ws)
 {
     sfVector2f new_size;
     sfRenderTexture_destroy(mc->rtex);
-    mc->rtex = sfRenderTexture_create(win_size.x, win_size.y, 0);
+    mc->rtex = sfRenderTexture_create(ws.x, ws.y, 0);
     sfText_setCharacterSize(mc->name_prompt,
-    win_size.y * MAIN_MENU_TXT_FACTOR * 0.13);
+    ws.y * MAIN_MENU_TXT_FACTOR * 0.13);
     sfText_setCharacterSize(mc->size,
-    win_size.y * MAIN_MENU_TXT_FACTOR * 0.13);
+    ws.y * MAIN_MENU_TXT_FACTOR * 0.13);
     scale_line_edit(mc->name,
-    (sfVector2f){win_size.x * 0.9, win_size.y * 0.2});
-    rescale_slider(mc->size_slider, TMP_V2F,
-    (sfVector2f){win_size.x * 0.205, win_size.y * 0.64});
+    (sfVector2f){ws.x * 0.9, ws.y * 0.2});
+    rescale_slider(mc->size_slider, (sfVector2f){ws.x * 0.55, ws.y * 0.1},
+    (sfVector2f){ws.x * 0.205, ws.y * 0.64});
     for (int i = 0; i < 4; i++) {
-        new_size = (sfVector2f)
-        {win_size.x * mc_size_fac[i][0], win_size.y * mc_size_fac[i][1]};
+        new_size = (sfVector2f){ws.x * mc_size_fac[i][0],
+        ws.y * mc_size_fac[i][1]};
         if (i < 2)
             new_size.y = new_size.x;
         set_sprite_size(mc->buttons[i]->sprite, new_size);
@@ -40,8 +40,8 @@ void move_mc(map_create_t *mc, sfVector2f ws)
     (sfVector2f){ws.x * 0.28, ws.y * 0.07});
     sfText_setPosition(mc->size, (sfVector2f){ws.x * 0.33, ws.y * 0.5});
     for (int i = 0; i < 4; i++) {
-        new_pos = (sfVector2f)
-        {ws.x * mc_pos_fac[i][0], ws.y * mc_pos_fac[i][1]};
+        new_pos = (sfVector2f){ws.x * mc_pos_fac[i][0],
+        ws.y * mc_pos_fac[i][1]};
         sfSprite_setPosition(mc->buttons[i]->sprite, new_pos);
         mc->buttons[i]->pos = new_pos;
     }

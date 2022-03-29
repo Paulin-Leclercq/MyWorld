@@ -23,3 +23,14 @@ void my_memcpy(void *dest, const void *src, size_t n)
     for (size_t i = 0; i < n; i++)
         d[i] = s[i];
 }
+
+int my_memcmp(void *aa, void *bb, size_t size)
+{
+    char *a = aa;
+    char *b = bb;
+
+    for (size_t i = 0; i < size; i++)
+        if (a[i] != b[i])
+            return 0;
+    return 1;
+}

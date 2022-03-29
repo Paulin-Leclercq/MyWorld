@@ -56,6 +56,7 @@ void gb_events(window_t *win, sfEvent ev, sfVector2f pos)
     game_t *ga = win->menus[EDIT_MAP];
     game_buttons_t *g = ga->gb;
 
+    ga->on_help = false;
     if (ev.type == sfEvtMouseButtonPressed)
         press_evt(g, ev, pos);
     if (ev.type == sfEvtMouseMoved)

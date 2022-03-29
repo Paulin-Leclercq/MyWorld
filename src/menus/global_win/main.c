@@ -47,7 +47,7 @@ void poll_events(window_t *win)
     sfVector2f win_size = {win->mode.width, win->mode.height};
     while (sfRenderWindow_pollEvent(win->win, &ev)) {
         if (ev.type == sfEvtClosed)
-            sfRenderWindow_close(win->win);
+            win->next_state = EXIT;
         if (!win->is_transition)
             win->event[win->state](win, ev);
         if (IS_WORLD_CLICK)
@@ -56,10 +56,12 @@ void poll_events(window_t *win)
     if (win->state == SETTINGS)
         check_sound_repeat(win, &ev);
     if (win->state == EDIT_MAP) {
-        move(&(((game_t *)win->menus[EDIT_MAP])->world->matrix));
+        move(((game_t *)win->menus[EDIT_MAP])->world
+        , ((game_t *)win->menus[EDIT_MAP])->win);
         if (mouse_pos(win_size, win) == MINIMAP)
             apply_minimap_brush(win->menus[EDIT_MAP]);
-        check_tooltip(win->menus[EDIT_MAP]);
+        if (!win->is_fullscreen)
+            check_tooltip(win->menus[EDIT_MAP]);
     }
 }
 
@@ -67,12 +69,15 @@ int main(int ac, char **av)
 {
     window_t *win;
 
+    if (ac == 2 && !my_strcmp(av[1], "-h"))
+        return usage();
     if (!global_texture() || !global_font())
         return 84;
     win = window_create(ac, av);
     if (!win)
         return 84;
     srand(rand_seed());
+    win->is_fullscreen = 0;
     while (sfRenderWindow_isOpen(win->win)) {
         poll_events(win);
         draw(win);

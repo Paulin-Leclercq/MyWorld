@@ -31,8 +31,7 @@ float ***get_gradient(sfBool reset)
 
     if (reset && gradient) {
         for (int i = 0; i < 128; i++) {
-            for (int j = 0; j < 128; j++)
-                free(gradient[i][j]);
+            free_loop_pe(gradient, i);
             free(gradient[i]);
         }
         free(gradient);
@@ -44,7 +43,7 @@ float ***get_gradient(sfBool reset)
 
 float lerp(float a, float b, float w)
 {
-    return (1.0 - w)*a + w*b;
+    return (1.0 - w) * a + w * b;
 }
 
 float dot_grid_gradient(int ix, int iy, float x, float y)

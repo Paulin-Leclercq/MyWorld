@@ -16,7 +16,7 @@ void draw_has_saved(game_t *g)
     sfRenderTexture_drawSprite(g->rtex, g->save_sprite, NULL);
 }
 
-void draw_world(game_t *g)
+void draw_world(game_t *g, int is_fullscreen)
 {
     sfSprite *s;
 
@@ -25,7 +25,8 @@ void draw_world(game_t *g)
     draw_fps(g->win);
     sfRenderTexture_display(g->win->r_tex);
     s = init_sprite_from_texture(sfRenderTexture_getTexture(g->win->r_tex));
-    sfSprite_setPosition(s, (sfVector2f){g->size.y * PART_OF_MINIMAP, 0});
+    if (!is_fullscreen)
+        sfSprite_setPosition(s, (sfVector2f){g->size.y * PART_OF_MINIMAP, 0});
     sfRenderTexture_drawSprite(g->rtex, s, NULL);
     sfSprite_destroy(s);
     sfRenderTexture_clear(g->win->r_tex, sfBlack);
@@ -59,11 +60,15 @@ const sfTexture *draw_game(window_t *win)
     game_t *g = win->menus[EDIT_MAP];
 
     sfRenderTexture_clear(g->rtex, sfBlack);
-    draw_world(g);
-    draw_minimap_to_game(g);
-    draw_gb_to_rtex(g);
+    draw_world(g, win->is_fullscreen);
+    if (!win->is_fullscreen) {
+        draw_minimap_to_game(g);
+        draw_gb_to_rtex(g);
+    }
     if (g->has_saved)
         draw_has_saved(g);
+    if (g->gb->is_help)
+        sfRenderTexture_drawSprite(g->rtex, g->how_to_play, NULL);
     sfRenderTexture_display(g->rtex);
     return sfRenderTexture_getTexture(g->rtex);
 }

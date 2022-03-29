@@ -16,7 +16,7 @@ struct mat4x4 {
 
 typedef struct mat4x4 mat4x4;
 
-mat4x4 *mat4x4_create();
+mat4x4 *mat4x4_create(void);
 void mat4x4_destroy(mat4x4 *mat);
 
 mat4x4 *mat4x4_multiplymat4x4(mat4x4 *mat1, mat4x4 *mat2);

@@ -40,3 +40,9 @@ void refresh_map(game_t *game)
     smooth_shadow(game->world, game->win);
     sfMusic_play(game->win->musics[0]);
 }
+
+void free_loop_pe(float ***gradient, int i)
+{
+    for (int j = 0; j < 128; j++)
+        free(gradient[i][j]);
+}

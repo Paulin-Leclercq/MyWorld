@@ -11,9 +11,13 @@ void switch_color_dir(window_t *win, int *dir)
 {
     game_t *g = win->menus[EDIT_MAP];
 
-    if ((win->next_state == HOME || win->next_state == EXIT)
-    && win->state == EDIT_MAP)
-        destroy_game_struct(win->menus[EDIT_MAP], win);
+    if (win->state == EDIT_MAP) {
+        if (win->next_state == EXIT)
+            save_game(win);
+        if (win->next_state == HOME || win->next_state == EXIT)
+            destroy_game_struct(win->menus[EDIT_MAP]);
+        win->is_fullscreen = 0;
+    }
     if (win->next_state == MAP_SELECT)
         init_entries(win->menus[MAP_SELECT],
         (sfVector2f){win->mode.width, win->mode.height});

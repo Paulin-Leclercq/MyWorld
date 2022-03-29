@@ -39,7 +39,7 @@ int entry_at(map_select_t *m, sfVector2f m_pos)
     return -1;
 }
 
-static inline void manage_move(map_select_t *m, sfEvent ev)
+static void manage_move(map_select_t *m, sfEvent ev)
 {
     sfVector2f pos = {ev.mouseMove.x, ev.mouseMove.y};
     check_button_move(m->buttons, 3 - (m->primary < 0 ? 2 : 0), ev);

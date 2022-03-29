@@ -7,9 +7,6 @@
 
 #include "world.h"
 
-static const sfVector2f rect[3] =
-{{0, 0}, {1000, 1000}, {1000, 0}};
-
 void draw_line(vertex_t vertxs[3], win_t *win)
 {
     win->tmp->position = (sfVector2f){vertxs[1].pos[0], vertxs[1].pos[1]};
@@ -25,8 +22,12 @@ void draw_triangle(vertex_t vertxs[3], triangle_t *tri, win_t *win)
     win->tmp->color = center_vertxs(vertxs, tri, win);
     for (int i = 0; i < 3; i++) {
         win->tmp->position = (sfVector2f) {vertxs[i].pos[0], vertxs[i].pos[1]};
-        if (tri->color.r == sfBlue.r && tri->color.g == sfBlue.g && tri->color.b == sfBlue.b)
-            win->tmp->texCoords = rect[i];
+        if (IS_BLUE(tri->color))
+            win->tmp->texCoords = water[i];
+        if (IS_GREEN(tri->color))
+            win->tmp->texCoords = grass[i];
+        if (IS_WHITE(tri->color))
+            win->tmp->texCoords = snow[i];
         sfVertexArray_append(win->array, *win->tmp);
     }
     if (win->params->is_outline)
@@ -47,7 +48,7 @@ void draw_meshes(world_t *world, win_t *win)
     project_meshes(world, win->params->zoom);
     sort_vertxs(world);
     if (!win->params->pause && sfClock_getElapsedTime(world->clock)
-    .microseconds / 1000000.0 > 1.0)
+    .microseconds / 1000000.0 > 0.02)
         move_light(world, win);
     if (world->light_source[2] > 0)
         draw_light(world, win);

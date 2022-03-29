@@ -69,7 +69,7 @@ void manage_settings_press(sfEvent *ev, window_t *win)
     se->framerate_button, se->sfx_minus, se->sfx_plus,
     se->music_minus, se->music_plus};
     int tmp = get_set_button_at(se, ev);
-    void (*actions[9])(settings_t *, window_t *) = {
+    void (*actions[9])(settings_t *) = {
         NULL, NULL, NULL,
         NULL, NULL, sfx_minus,
         sfx_plus, music_minus, music_plus
@@ -80,7 +80,7 @@ void manage_settings_press(sfEvent *ev, window_t *win)
         return;
     }
     if (actions[tmp])
-        actions[tmp](se, win);
+        actions[tmp](se);
     press_button(buttons[tmp], 1);
     if (ev->type != sfEvtResized || tmp <= 4)
         sfClock_restart(se->repeat_clock);

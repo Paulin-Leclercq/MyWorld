@@ -7,6 +7,17 @@
 
 #include "world.h"
 
+void destroy_win2(win_t *win)
+{
+    sfClock_destroy(win->evt_clock);
+    free(win->states);
+    free(win->sounds);
+    free(win->musics);
+    free(win->params);
+    free(win->tmp);
+    free(win);
+}
+
 void destroy_win(win_t *win)
 {
     sfRenderTexture_destroy(win->r_tex);
@@ -24,16 +35,12 @@ void destroy_win(win_t *win)
         sfMusic_stop(win->musics[i]);
         sfMusic_destroy(win->musics[i]);
     }
-    free(win->states);
-    free(win->sounds);
-    free(win->musics);
-    free(win->params);
-    free(win->tmp);
-    free(win);
+    destroy_win2(win);
 }
 
 void init_params(win_t *win, size_t size)
 {
+    win->evt_clock = sfClock_create();
     win->circle = sfCircleShape_create();
     win->convex = sfConvexShape_create();
     win->array = sfVertexArray_create();
@@ -55,14 +62,14 @@ void init_params(win_t *win, size_t size)
 win_t *win_create(size_t nb_trig, sfVector2f size)
 {
     win_t *win = malloc(sizeof(win_t));
-    sfIntRect rect = {0, 0, 1000, 1000};
-
+    sfIntRect rect = {0, 0, 2000, 2000};
     if (win == NULL)
         return NULL;
     my_memset(win, 0, sizeof(win_t));
+    win->draw_fps = 0;
     win->states = malloc(sizeof(sfRenderStates));
     win->states->shader = 0;
-    win->states->texture = sfTexture_createFromFile("assets/water.png", &rect);
+    win->states->texture = sfTexture_createFromFile("assets/pat.png", &rect);
     win->states->blendMode = sfBlendNone;
     win->states->transform = sfTransform_Identity;
     win->settings.antialiasingLevel = ALIASING;

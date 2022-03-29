@@ -72,5 +72,6 @@ void draw_fps(win_t *w)
         sfClock_restart(c);
     }
     free(fps_str);
-    sfRenderTexture_drawText(w->r_tex, t, NULL);
+    if (w->draw_fps)
+        sfRenderTexture_drawText(w->r_tex, t, NULL);
 }

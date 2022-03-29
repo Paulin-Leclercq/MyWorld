@@ -17,5 +17,5 @@ unsigned rand_seed(void)
         return (unsigned)(unsigned long)(&fd);
     read(fd, &seed, sizeof(unsigned));
     close(fd);
-    return fd;
+    return seed;
 }

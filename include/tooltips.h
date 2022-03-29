@@ -24,4 +24,4 @@ static const char *tips[13] = {
     "  Help "
 };
 
-#endif // TOOL_TIP_H
+#endif

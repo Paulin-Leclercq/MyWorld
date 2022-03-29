@@ -6,6 +6,8 @@
 ##
 
 SRC = \
+	./src/help.c 							\
+	./src/menus/game/put_fullscreen.c 		\
 	./src/mini_map/comparators.c 			\
 	./src/mini_map/where.c		 			\
 	./src/sounds/create_sounds.c			\

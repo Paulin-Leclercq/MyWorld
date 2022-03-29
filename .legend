@@ -1,0 +1,2 @@
+the first four bytes are an unsigned int for the size of the map.
+All other 4 byte packets are the height of each point in the map, sotred as float.

@@ -8,7 +8,7 @@
 #include "menus.h"
 #include <stdarg.h>
 
-void update_vol(float vol, char const *format, ...)
+void update_vol(float m_vol, float s_vol, char const *format, ...)
 {
     va_list list;
     void *v;
@@ -19,53 +19,37 @@ void update_vol(float vol, char const *format, ...)
         if (!v)
             continue;
         if (format[i] == 's')
-            sfSound_setVolume(v, vol);
+            sfSound_setVolume(v, s_vol);
         if (format[i] == 'm')
-            sfMusic_setVolume(v, vol);
+            sfMusic_setVolume(v, m_vol);
     }
     va_end(list);
 }
 
-void sfx_minus(settings_t *se, window_t *win)
+void sfx_minus(settings_t *se)
 {
-    game_t *g = win->menus[EDIT_MAP];
-
     if (se->sfx_vol == 0)
         return;
     se->sfx_vol--;
-    if (win->state == EDIT_MAP)
-        update_vol(se->sfx_vol, "s", g->win->sounds[0]);
 }
 
-void sfx_plus(settings_t *se, window_t *win)
+void sfx_plus(settings_t *se)
 {
-    game_t *g = win->menus[EDIT_MAP];
-
     if (se->sfx_vol == 100)
         return;
     se->sfx_vol++;
-    if (win->state == EDIT_MAP)
-        update_vol(se->sfx_vol, "s", g->win->sounds[0]);
 }
 
-void music_minus(settings_t *se, window_t *win)
+void music_minus(settings_t *se)
 {
-    game_t *g = win->menus[EDIT_MAP];
-
     if (se->music_vol == 0)
         return;
     se->music_vol--;
-    if (win->state == EDIT_MAP)
-        update_vol(se->music_vol, "m", g->win->musics[0]);
 }
 
-void music_plus(settings_t *se, window_t *win)
+void music_plus(settings_t *se)
 {
-    game_t *g = win->menus[EDIT_MAP];
-
     if (se->music_vol == 100)
         return;
     se->music_vol++;
-    if (win->state == EDIT_MAP)
-        update_vol(se->music_vol, "m", g->win->musics[0]);
 }

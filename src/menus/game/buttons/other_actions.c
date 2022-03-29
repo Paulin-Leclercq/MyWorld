@@ -25,6 +25,11 @@ void create_tooltip(game_buttons_t *g, sfVector2f tex_size)
 
 void get_help(void *win)
 {
+    window_t *w = win;
+    game_t *g = w->menus[EDIT_MAP];
+
+    g->gb->is_help = !g->gb->is_help;
+    g->on_help = true;
 }
 
 void quit_game(void *win)

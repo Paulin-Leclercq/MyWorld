@@ -62,7 +62,7 @@ void add_mesh(world_t *world, mesh_t *mesh)
     world->nb_trig += mesh->trig_size;
 }
 
-world_t *create_world()
+world_t *create_world(void)
 {
     world_t *world = malloc(sizeof(world_t));
     if (world == NULL)

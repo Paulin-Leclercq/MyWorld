@@ -30,7 +30,7 @@ mat4x4 *mat4x4_scale(float s)
     return mat;
 }
 
-mat4x4 *mat4x4_create()
+mat4x4 *mat4x4_create(void)
 {
     mat4x4 *mat = malloc(sizeof(mat4x4));
 

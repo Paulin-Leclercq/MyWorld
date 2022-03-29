@@ -75,9 +75,9 @@ void launch_thread(tmp_shadow_t *tmp, tmp_shadow_t *tmp2
 
     if (start) {
         tmp->start = 0;
-        tmp->end = (win->map_size - 1)  * 0.5;
+        tmp->end = (win->map_size - 1) * 0.5;
         tmp->turn = 0;
-        tmp2->start = (win->map_size - 1)  * 0.5;
+        tmp2->start = (win->map_size - 1) * 0.5;
         tmp2->end = win->map_size - 1;
         tmp2->turn = 0;
     }

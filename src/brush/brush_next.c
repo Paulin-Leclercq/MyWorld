@@ -15,9 +15,9 @@ void update_color(world_t *world)
         height = get_max_height(world->a_triangles[i]);
         if (height > 12)
             world->a_triangles[i].color = sfWhite;
-        else if (height <= -10)
+        if (height <= -10)
             world->a_triangles[i].color = sfBlue;
-        else
+        if (height <= 12 && height > -10)
             world->a_triangles[i].color = sfGreen;
     }
 }

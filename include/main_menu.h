@@ -15,4 +15,4 @@ static const char *button_texts[4] = {
     "Quit"
 };
 
-#endif // MAIN_MENU_H
+#endif

@@ -7,16 +7,11 @@
 
 #include "world.h"
 
-typedef union {
-    float f;
-    uint32_t i;
-} un_t;
-
 float q_rsqrt(float number)
 {
     un_t conv = {.f = number};
 
-    conv.i  = 0x5f3759df - (conv.i >> 1);
+    conv.i = 0x5f3759df - (conv.i >> 1);
     conv.f *= 1.5F - (number * 0.5F * conv.f * conv.f);
     return conv.f;
 }
@@ -38,10 +33,10 @@ mat4x4 *mat4x4_multiplymat4x4(mat4x4 *mat1, mat4x4 *mat2)
 
     for (int col = 0; col < 4; col++) {
         for (int line = 0; line < 4; line++) {
-            mat->val[line*4 + col] = mat1->val[line*4 + 0] * mat2->val[0*4 +
-            col] + mat1->val[line*4 + 1] * mat2->val[1*4 + col] + mat1->val[
-            line*4 + 2] * mat2->val[2*4 + col] + mat1->val[line*4 + 3] *mat2
-            ->val[3*4 + col];
+            mat->val[line * 4 + col] = mat1->val[line * 4 + 0] * mat2->val
+            [0 * 4 + col] + mat1->val[line * 4 + 1] * mat2->val[1 * 4 + col] +
+            mat1->val[line * 4 + 2] * mat2->val[2 * 4 + col] + mat1->val
+            [line * 4 + 3] * mat2->val[3 * 4 + col];
         }
     }
     return mat;

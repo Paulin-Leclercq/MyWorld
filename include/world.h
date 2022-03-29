@@ -35,14 +35,36 @@
     #define PI 3.14159265359
     #define CONST 0b10000000
 
+    #define NB_ACTIONS 5
+
     #define ABS(nb) ((nb) < 0 ? -(nb) : (nb))
 
-    #define P_HEIGT(world, i, size) world->a_vertxs \
-    [i * (size) + (size - j)]->pos[1]
+    #define P_HEIGT(world, i, size) \
+    world->a_vertxs[i * (size) + (size - j)]->pos[1]
+
+    #define IS_BLUE(color) my_memcmp(&color, &sfBlue, sizeof(sfColor))
+    #define IS_GREEN(color) my_memcmp(&color, &sfGreen, sizeof(sfColor))
+    #define IS_WHITE(color) my_memcmp(&color, &sfWhite, sizeof(sfColor))
 
     #define BRUSH_DIR (map->is_circle ? \
     (map->s_br - sqrt(pow(i - x, 2) + pow(j - y, 2))) / 10.0 : 1)
 
+static const sfVector2f snow[3] = {
+    {0, 0}, {1000, 1000}, {0, 1000}
+};
+
+static const sfVector2f grass[3] = {
+    {1000, 0}, {2000, 0}, {1000, 1000}
+};
+
+static const sfVector2f water[3] = {
+    {0, 0}, {1000, 1000}, {1000, 0}
+};
+
+typedef union {
+    float f;
+    uint32_t i;
+} un_t;
 
 typedef struct world_struct {
     vecsort_t *sortBuffer;
@@ -77,8 +99,6 @@ typedef struct tmp_struct {
     sfBool turn;
 } tmp_shadow_t;
 
-    #define NB_ACTIONS 5
-
 typedef struct minimap {
     void (*actions[NB_ACTIONS])(world_t *,
     struct minimap *, int (*)(int, int, int));
@@ -99,10 +119,10 @@ typedef struct minimap {
 static const float height = 800.0;
 
 void app_point(float x, float y, minimap_t *map);
-void move(mat4x4 **mat_world);
+void move(world_t *world, win_t *win);
 void radix_sort(void *toSort2, size_t sizes[2],
 size_t offset_in_struct, void *buffer2);
-world_t *create_world();
+world_t *create_world(void);
 void add_mesh(world_t *world, mesh_t *mesh);
 void draw_meshes(world_t *world, win_t *win);
 void project_meshes(world_t *world, float delta);
@@ -146,5 +166,7 @@ void get_player_pos(world_t *world);
 void get_player_dir(world_t *world);
 void where_minimap(world_t *world, minimap_t *map, long long size);
 void where_minimap_square(world_t *world, minimap_t *map, long long size);
+void free_loop_pe(float ***gradient, int i);
+int my_memcmp(void *aa, void *bb, size_t size);
 
 #endif

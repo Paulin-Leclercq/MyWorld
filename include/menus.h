@@ -38,10 +38,6 @@
     #define ENTRY_Y_SPAN 0.12
     #define ENTRY_SPACING 1.35
     #define BOUNDS(s) (sfSprite_getGlobalBounds(s))
-    #define SEMI_COLOR ((sfColor){127, 127, 127, 255})
-    #define SEMI_TRANSP ((sfColor){127, 127, 127, 127})
-    #define DEFAULT_2F (sfVector2f){1, 1}
-    #define TMP_V2F (sfVector2f){win_size.x * 0.55, win_size.y * 0.1}
     #define ENTRY_Y_SPAN 0.12
 
     #define SAVE_MAX_TIME 3000000
@@ -50,7 +46,7 @@
 
     #define MAP_SIZE (get_level_size(win))
 
-    #define IS_WORLD_CLICK (win->state == EDIT_MAP && \
+    #define IS_WORLD_CLICK (win->state == EDIT_MAP &&\
     (mouse_pos(win_size, win) == WORLD || ev.type == sfEvtMouseButtonReleased))
 
     #define SPECTATOR_SIZE 64
@@ -65,9 +61,23 @@
     #define NB_BUTTONS 13
     #define DOUBLE_CLICK_DELAY 500000
 
-static const sfColor sfGrey = {128, 128, 128, 255};
+static const sfColor sfGrey = {
+    128, 128, 128, 255
+};
 
-typedef enum {WORLD, MINIMAP, BUTTONS} mouse_pos_t;
+static const sfColor SEMI_COLOR = {
+    127, 127, 127, 255
+};
+static const sfColor SEMI_TRANSP = {
+    127, 127, 127, 127
+};
+static const sfVector2f DEFAULT_2F = {
+    1, 1
+};
+
+typedef enum {
+    WORLD, MINIMAP, BUTTONS
+} mouse_pos_t;
 
 // structures
 
@@ -147,6 +157,7 @@ typedef struct win {
     sfVector2i tmp_pos;
 
     spectator_t *spec;
+    int is_fullscreen;
 } window_t;
 
 typedef enum {
@@ -208,6 +219,7 @@ typedef struct {
     int selected;
     int tool_tip_enabled;
     float y_offset;
+    bool is_help;
 } game_buttons_t;
 
 typedef struct {
@@ -219,11 +231,13 @@ typedef struct {
     game_buttons_t *gb;
     sfClock *save_clock;
     sfSprite *save_sprite;
+    sfSprite *how_to_play;
     char *file;
     int dimension;
     int is_selected;
     int is_from_file;
     int has_saved;
+    bool on_help;
 } game_t;
 
 typedef struct {
@@ -248,14 +262,23 @@ typedef struct {
 } map_select_t;
 
 // int rects
-static const sfIntRect icon_rect = {0, 671, 648, 648};
-static const sfIntRect background_rect = {0, 0, 1, 1};
+static const sfIntRect icon_rect = {
+    0, 671, 648, 648
+};
+static const sfIntRect background_rect = {
+    0, 0, 1, 1
+};
 static const sfIntRect but_rects[3] = {
     {0, 81, 315, 80},
     {0, 81, 315, 80},
     {0, 81, 315, 80}
 };
-static const sfIntRect hider_rect = {82, 241, 128, 128};
+static const sfIntRect vomi_rect = {
+    1046, 560, 542, 372
+};
+static const sfIntRect hider_rect = {
+    82, 241, 128, 128
+};
 static const sfIntRect button_rects[4] = {
     {0, 1, 630, 80},
     {0, 81, 315, 80}
@@ -274,23 +297,25 @@ static const sfIntRect settings_rects[11] = {
     {80, 161, 80, 80}
 };
 static const sfIntRect gb_rects[] = {
-    {648, 671, 80, 80}, // up
-    {808, 671, 80, 80}, // average without water
-    {648, 751, 80, 80}, // average with water
-    {728, 671, 80, 80}, // down
-    {728, 751, 80, 80}, // down average
-    {808, 751, 80, 80}, // circle
-    {888, 751, 80, 80}, // reload
-    {648, 831, 80, 80}, // save
-    {728, 831, 80, 80}, // quit
-    {808, 831, 80, 80}, // pause
-    {648, 911, 80, 80}, // +1h
-    {728, 911, 80, 80}, // -1h
-    {808, 911, 80, 80}, // help
-    {888, 831, 80, 80}, // play
-    {888, 671, 80, 80}, // rectangle
+    {648, 671, 80, 80},
+    {808, 671, 80, 80},
+    {648, 751, 80, 80},
+    {728, 671, 80, 80},
+    {728, 751, 80, 80},
+    {808, 751, 80, 80},
+    {888, 751, 80, 80},
+    {648, 831, 80, 80},
+    {728, 831, 80, 80},
+    {808, 831, 80, 80},
+    {648, 911, 80, 80},
+    {728, 911, 80, 80},
+    {808, 911, 80, 80},
+    {888, 831, 80, 80},
+    {888, 671, 80, 80},
 };
-static const sfIntRect line_edit_rect = {1029, 435, 808, 88};
+static const sfIntRect line_edit_rect = {
+    1029, 435, 808, 88
+};
 static const sfIntRect mc_rects[] = {
     {160, 161, 80, 80},
     {240, 161, 80, 80},
@@ -309,7 +334,9 @@ static const sfIntRect check_rect[2] = {
 static const sfIntRect game_button_rects[] = {
     {0, 0, 1, 1}
 };
-static const sfIntRect cone_rect = {0, 369, 128, 128};
+static const sfIntRect cone_rect = {
+    0, 369, 128, 128
+};
 static const sfIntRect save_rect[2] = {
     {648, 991, 624, 106},
     {648, 1097, 624, 106}
@@ -409,11 +436,11 @@ void manage_settings_press(sfEvent *ev, window_t *win);
 void manage_settings_release(sfEvent *ev, window_t *win);
 void reset_set_buttons(settings_t *se);
 void update_all_texts(settings_t *se);
-void sfx_minus(settings_t *se, window_t *win);
-void sfx_plus(settings_t *se, window_t *win);
-void music_minus(settings_t *se, window_t *win);
-void music_plus(settings_t *se, window_t *win);
-void update_vol(float vol, char const *format, ...);
+void sfx_minus(settings_t *se);
+void sfx_plus(settings_t *se);
+void music_minus(settings_t *se);
+void music_plus(settings_t *se);
+void update_vol(float m_vol, float s_vol, char const *format, ...);
 void settings_ev(window_t *win, sfEvent ev);
 const sfTexture *draw_settings(window_t *win);
 settings_t *init_settings(window_t *win);
@@ -455,11 +482,12 @@ void destroy_slider(slider_t *s);
 void release_mc(map_create_t *mc, int index, window_t *win);
 void destroy_check_box(check_box *c);
 void destroy_mc(map_create_t *mc);
-game_t *create_game(unsigned size, sfVector2f win_size, int is_selected);
+game_t *create_game(unsigned size, sfVector2f win_size,
+int is_selected, settings_t *se);
 const sfTexture *draw_game(window_t *win);
 void game_events(window_t *win, sfEvent ev);
 mouse_pos_t mouse_pos(sfVector2f win_size, window_t *win);
-void destroy_game_struct(game_t *game, window_t *win);
+void destroy_game_struct(game_t *game);
 int save_map(game_t *game, const char *filename, unsigned int size);
 unsigned int read_map(game_t *game, const char *filename);
 sfSprite *draw_gb(game_t *ga);
@@ -515,5 +543,7 @@ int load_game_from_file(game_t *g, const char *filename);
 unsigned map_size_from_file(char const *file);
 int check_double_click(map_select_t *m, int entry_clicked);
 int recolor_buttons(map_select_t *m, sfVector2f pos);
+void set_volume(game_t *g, settings_t *se);
+void fullscreen_mode(window_t *win);
 
 #endif

@@ -38,7 +38,7 @@ void load_map(char const *map, window_t *win)
     unsigned size = map_size(map);
 
     win->menus[EDIT_MAP] = create_game(size,
-    (sfVector2f){win->mode.width, win->mode.height}, 1);
+    (sfVector2f){win->mode.width, win->mode.height}, 1, win->menus[SETTINGS]);
     read_map(win->menus[EDIT_MAP], map);
     set_next_win_state(win, EDIT_MAP);
     update_color(((game_t *)(win->menus[EDIT_MAP]))->world);

@@ -60,7 +60,7 @@ void rota_right(world_t *world, win_t *win)
 void move_light(world_t *world, win_t *win)
 {
     float *tmp = malloc(sizeof(float) * 3);
-    mat4x4 *mat_mov = mat4x4_rx(win->params->day ? -PI / 82 : -PI / 35);
+    mat4x4 *mat_mov = mat4x4_rx((win->params->day ? -PI / 82 : -PI / 35) / 30);
 
     mat4x4_multiplyvector3(mat_mov, world->light_source, tmp);
     sfClock_restart(world->clock);
