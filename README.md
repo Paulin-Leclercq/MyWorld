@@ -6,8 +6,8 @@
 > Be careful, the launch map function is not working!
 
 ## Demo
-
 https://youtu.be/f5QDL-e1gMY
+
 ![Alt Text](https://github.com/Paulin-Leclercq/MyWorld-in-progress-/blob/main/world.gif)
 
 ## Install
