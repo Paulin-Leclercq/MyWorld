@@ -10,6 +10,8 @@
 void draw_button_to_rtex(button_t *b, sfRenderTexture *rtex)
 {
     sfRenderTexture_drawSprite(rtex, b->sprite, NULL);
+    center_text(b->text);
+    sfText_setPosition(b->text, b->pos);
     sfRenderTexture_drawText(rtex, b->text, NULL);
 }
 

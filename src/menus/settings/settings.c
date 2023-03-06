@@ -28,12 +28,9 @@ button_t *init_set_button(const sfIntRect rect)
     return b;
 }
 
-#define BACKGROUND_SETTINGS 0
-#define BACK_SETTINGS 0
-
 void init_all_settings_button(settings_t *se)
 {
-    se->framerate_button = init_set_button(settings_rects[3]);
+    se->framerate_button = init_set_button(settings_rects[2]);
     se->res_button = init_set_button(settings_rects[7]);
     se->sfx_minus = init_set_button(settings_rects[0]);
     se->sfx_plus = init_set_button(settings_rects[1]);
@@ -55,8 +52,9 @@ settings_t *init_settings(window_t *win)
     se->music_vol = 100;
     se->framerate = 1;
     se->resolution = 0;
-    se->back = init_set_button(settings_rects[BACK_SETTINGS]);
-    se->background = init_sprite(global_texture(), settings_rects[BACKGROUND_SETTINGS], (sfVector2f){0, 0});
+    se->back = init_set_button(settings_rects[10]);
+    se->background = init_sprite(global_texture(),
+    settings_rects[9], (sfVector2f){0, 0});
     se->rtex = sfRenderTexture_create(win->mode.width, win->mode.height, 0);
     init_all_settings_button(se);
     rescale_settings(se, win);

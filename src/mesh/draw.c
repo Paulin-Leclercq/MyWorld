@@ -17,12 +17,17 @@ void draw_line(vertex_t vertxs[3], win_t *win)
     sfVertexArray_append(win->array, *win->tmp);
 }
 
-void draw_triangle(vertex_t vertxs[3], triangle_t *tri,
-win_t *win)
+void draw_triangle(vertex_t vertxs[3], triangle_t *tri, win_t *win)
 {
     win->tmp->color = center_vertxs(vertxs, tri, win);
     for (int i = 0; i < 3; i++) {
         win->tmp->position = (sfVector2f) {vertxs[i].pos[0], vertxs[i].pos[1]};
+        if (IS_BLUE(tri->color))
+            win->tmp->texCoords = water[i];
+        if (IS_GREEN(tri->color))
+            win->tmp->texCoords = grass[i];
+        if (IS_WHITE(tri->color))
+            win->tmp->texCoords = snow[i];
         sfVertexArray_append(win->array, *win->tmp);
     }
     if (win->params->is_outline)
@@ -40,11 +45,10 @@ void draw_meshes(world_t *world, win_t *win)
 {
     size_t i = -1;
     vertex_t pts[3];
-
-    project_meshes(world);
+    project_meshes(world, win->params->zoom);
     sort_vertxs(world);
     if (!win->params->pause && sfClock_getElapsedTime(world->clock)
-    .microseconds / 1000000.0 > 1.0)
+    .microseconds / 1000000.0 > 0.02)
         move_light(world, win);
     if (world->light_source[2] > 0)
         draw_light(world, win);
@@ -57,6 +61,6 @@ void draw_meshes(world_t *world, win_t *win)
     }
     sfVertexArray_setPrimitiveType(win->array, win->params->is_outline ?
     sfLines : sfTriangles);
-    sfRenderTexture_drawVertexArray(win->r_tex, win->array, 0);
+    sfRenderTexture_drawVertexArray(win->r_tex, win->array, win->states);
     sfVertexArray_clear(win->array);
 }

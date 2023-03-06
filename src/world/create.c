@@ -18,10 +18,17 @@ void free_mesh(void *value)
 
 void destroy_world(world_t *world)
 {
+    free(world->sortBuffer);
+    free(world->sortBuffer2);
     free(world->matrix);
     sfClock_destroy(world->clock);
+    free(world->a_vertxs[0]);
+    free(world->a_vertxs);
+    free(world->projected);
+    free(world->a_triangles);
     free(world->light_start);
     free(world->light_source);
+    sfConvexShape_destroy(world->back);
     free(world);
 }
 
@@ -55,7 +62,7 @@ void add_mesh(world_t *world, mesh_t *mesh)
     world->nb_trig += mesh->trig_size;
 }
 
-world_t *create_world()
+world_t *create_world(void)
 {
     world_t *world = malloc(sizeof(world_t));
     if (world == NULL)

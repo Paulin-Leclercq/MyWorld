@@ -7,11 +7,14 @@
 
 #include "menus.h"
 
-const sfTexture *draw_mc(map_create_t *mc, sfVector2f ws)
+const sfTexture *draw_mc(window_t *win)
 {
     sfSprite *s;
+    map_create_t *mc = win->menus[CREATE_MAP];
+    sfVector2f ws = {win->mode.width, win->mode.height};
 
     sfRenderTexture_clear(mc->rtex, sfBlack);
+    draw_spectator_to_rtex(win->spec, mc->rtex, 1, 1);
     sfRenderTexture_drawText(mc->rtex, mc->name_prompt, NULL);
     s = draw_line_edit(mc->name, (sfVector2f){ws.x * 0.04, ws.y * 0.23});
     sfRenderTexture_drawSprite(mc->rtex, s, NULL);

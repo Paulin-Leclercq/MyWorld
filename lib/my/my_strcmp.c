@@ -27,7 +27,7 @@ int my_strcmp(char const *s1, char const *s2)
     for (i; s1[i] != '\0' && s2[j] != '\0'; i++) {
         if (s1[i] > s2[j])
             return (1);
-        else if (s1[i] < s2[j])
+        if (s1[i] < s2[j])
             return (-1);
         j++;
     }

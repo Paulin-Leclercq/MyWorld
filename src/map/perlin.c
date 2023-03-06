@@ -25,14 +25,30 @@ float ***fill_gradient(int x, int y)
     return gradient;
 }
 
+float ***get_gradient(sfBool reset)
+{
+    static float ***gradient = 0;
+
+    if (reset && gradient) {
+        for (int i = 0; i < 128; i++) {
+            free_loop_pe(gradient, i);
+            free(gradient[i]);
+        }
+        free(gradient);
+    }
+    if (!gradient || reset)
+        gradient = fill_gradient(128, 128);
+    return gradient;
+}
+
 float lerp(float a, float b, float w)
 {
-    return (1.0 - w)*a + w*b;
+    return (1.0 - w) * a + w * b;
 }
 
 float dot_grid_gradient(int ix, int iy, float x, float y)
 {
-    static float ***gradient = 0;
+    float ***gradient = get_gradient(0);
     float dx = x - (float)ix;
     float dy = y - (float)iy;
 

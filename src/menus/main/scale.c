@@ -44,5 +44,4 @@ void scale_main_menu(main_menu_t *m, window_t *win)
     m->text = sfRenderTexture_create(win_size.x, win_size.y, 0);
     move_main_buttons(m->buttons, win_size);
     scale_main_buttons(m->buttons, win_size);
-    set_sprite_size(m->background, win_size);
 }

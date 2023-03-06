@@ -7,47 +7,82 @@
 
 #include "menus.h"
 #include "my.h"
+#include "line_edit.h"
 
-static const char *codes[] = {
-    "A", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",
-    "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
-};
+const char *get_text(line_edit_t *le)
+{
+    char const *r;
 
-static const char *digits[] = {
-    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
-};
+    if (le->has_underscore)
+        remove_last_text(le->text);
+    r = sfText_getString(le->text);
+    if (le->has_underscore)
+        append_to_text(le->text, ' ');
+    return r;
+}
 
-char *switch_ev(sfEvent ev, char const *base)
+void append_to_text(sfText *t, char c)
+{
+    char const *base = sfText_getString(t);
+    int const base_len = my_strlen(base);
+    char *new = malloc(sizeof(char) * (base_len + 2));
+
+    my_strcpy(new, base);
+    new[base_len] = c;
+    new[base_len + 1] = 0;
+    sfText_setString(t, new);
+    free(new);
+}
+
+void remove_last_text(sfText *t)
+{
+    char const *base = sfText_getString(t);
+    int const base_len = my_strlen(base);
+    char *new;
+
+    if (!base_len)
+        return;
+    new = malloc(sizeof(char) * (base_len));
+    for (int i = 0; i < base_len - 1; i++)
+        new[i] = base[i];
+    new[base_len - 1] = 0;
+    sfText_setString(t, new);
+    free(new);
+}
+
+void append_ev(sfEvent ev, sfText *base)
 {
     int code = ev.key.code;
 
     if (code <= sfKeyZ && code >= sfKeyA)
-        return str_concat(2, base, codes[code]);
+        append_to_text(base, codes[code]);
     if (code == sfKeyNum8 && !ev.key.shift)
-        return str_concat(2, base, "_");
+        append_to_text(base, '_');
     if (code == sfKeyHyphen)
-        return str_concat(2, base, ev.key.shift ? "6" : "-");
+        append_to_text(base, ev.key.shift ? '6' : '-');
     if (code == sfKeyQuote && ev.key.shift)
-        return str_concat(2, base, "4");
+        append_to_text(base, '4');
     if (ev.key.shift && code >= sfKeyNum0 && code <= sfKeyNum9)
-        return str_concat(2, base, digits[code - sfKeyNum0]);
+        append_to_text(base, digits[code - sfKeyNum0]);
     if (code >= sfKeyNumpad0 && code <= sfKeyNumpad9)
-        return str_concat(2, base, digits[code - sfKeyNumpad0]);
-    return my_strdup(base);
+        append_to_text(base, digits[code - sfKeyNumpad0]);
 }
 
 void line_edit_event(line_edit_t *le, sfEvent ev)
 {
-    char const *str = sfText_getString(le->text);
-    char *new;
-
+    char const *base = sfText_getString(le->text);
+    char const *end;
     if (ev.type != sfEvtKeyPressed)
         return;
-    if (ev.key.code == sfKeyBackspace) {
-        new = my_strdup(str);
-        new[my_strlen(new) - 1] = 0;
-    } else
-        new = switch_ev(ev, str);
-    sfText_setString(le->text, new);
-    free(new);
+    if (le->has_underscore) {
+        remove_last_text(le->text);
+        le->has_underscore = 0;
+    }
+    if (ev.key.code == sfKeyBackspace)
+        remove_last_text(le->text);
+    else
+        append_ev(ev, le->text);
+    end = sfText_getString(le->text);
+    if (my_strcmp(base, end))
+        sfClock_restart(le->underscore);
 }

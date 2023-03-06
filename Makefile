@@ -6,16 +6,38 @@
 ##
 
 SRC = \
+	./src/help.c 							\
+	./src/menus/game/put_fullscreen.c 		\
+	./src/mini_map/comparators.c 			\
+	./src/mini_map/where.c		 			\
+	./src/sounds/create_sounds.c			\
+	./src/srand.c 							\
+	./src/menus/map_select/double_click.c   \
+	./src/menus/save_from_file.c			\
+	./src/menus/spectator.c 				\
+	./src/my_memset.c 						\
+	./src/menus/global_win/textures.c 		\
+	./src/menus/game/buttons/actions.c 		\
+	./src/menus/game/accessors.c 			\
+	src/menus/game/buttons/other_actions.c  \
+	./src/world/background.c				\
+	./src/map/refresh.c						\
+	./src/menus/game/buttons/create.c		\
+	./src/menus/game/buttons/events.c		\
+	./src/menus/game/draw.c					\
+	./src/menus/map_select/events.c 		\
+	./src/menus/game/buttons/static_event.c \
+	./src/menus/map_select/draw.c			\
+	./src/menus/map_select/load_entries.c 	\
+	./src/menus/map_select/release.c		\
 	./src/fps.c                             \
-	./src/load.c                            \
-	./src/main.c                            \
+	./src/free_lists.c                      \
 	./src/mesh/draw.c                       \
 	./src/map/perlin.c                      \
 	./src/map/smooth.c                      \
 	./src/brush/brush.c                     \
 	./src/brush/brush_next.c                \
 	./src/mesh/create.c                     \
-	./src/player/calc.c                     \
 	./src/radix/utils.c                     \
 	./src/input/params.c                    \
 	./src/light/shades.c                    \
@@ -64,7 +86,6 @@ SRC = \
 	./src/menus/sprite/sprite_modif.c       \
 	./src/menus/button/get_button_ev.c      \
 	./src/menus/global_win/transition.c     \
-	./src/menus/map_select/map_create.c     \
 	./src/menus/settings/visu_updates.c     \
 	./src/menus/global_win/init_window.c    \
 	./src/menus/global_win/rescale_all.c    \
@@ -73,7 +94,9 @@ SRC = \
 	./src/menus/settings/rendering_evt.c    \
 	./src/menus/settings/scale_settings.c   \
 	./src/menus/settings/set_evt_manager.c	\
-	./src/save.c
+	./src/save.c							\
+	./src/mouse_move/mouse_move.c			\
+	./src/player/calc.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -93,6 +116,7 @@ $(NAME):   $(OBJ)
 	gcc -o $(NAME) $(FLAGS) $(OBJ) $(LDFLAGS)
 
 clean:
+	find . -name "*.o" -delete
 	rm -f $(OBJ)
 
 fclean:    clean
@@ -106,7 +130,7 @@ fclean:    clean
 
 re:        fclean all
 
-run: re
+run: all
 	./$(NAME)
 
 lib_fclean:
@@ -118,8 +142,8 @@ push_fclean: fclean
 re:	fclean all
 
 valgrind: all
-	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=definite \
-	./$(NAME)
+	valgrind --track-origins=yes --leak-check=full \
+	--show-leak-kinds=definite,indirect ./$(NAME)
 
 tests_run: exec_lib
 	gcc -o unit_tests $(SRC) tests/*.c -Llib/ -lmy --coverage -lcriterion

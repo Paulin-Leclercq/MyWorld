@@ -14,7 +14,8 @@ float calculate_shades(float vecs[2][3], float *light, vertex_t *vertxs)
     float light_dir[3] = {
     light[0] - (vertxs[0].pos[0] + vertxs[1].pos[0] + vertxs[2].pos[0]) * 0.33,
     light[1] - (vertxs[0].pos[1] + vertxs[1].pos[1] + vertxs[2].pos[1]) * 0.33,
-    light[2] - (vertxs[0].pos[2] + vertxs[1].pos[2] + vertxs[2].pos[2]) * 0.33};
+    light[2] -
+    (vertxs[0].pos[2] + vertxs[1].pos[2] + vertxs[2].pos[2]) * 0.33};
 
     crossproduct3(normale, vecs[0], vecs[1]);
     normalize(normale);

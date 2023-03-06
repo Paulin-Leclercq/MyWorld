@@ -9,9 +9,9 @@
     #define LIST_H
 
 typedef struct list {
-    void *data;
     struct list *next;
     struct list *prev;
+    void *data;
 } list_t;
 
 void append_node(list_t **begin, void *data);

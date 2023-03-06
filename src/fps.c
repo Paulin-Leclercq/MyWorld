@@ -8,32 +8,23 @@
 #include "world.h"
 #include "my.h"
 #include <math.h>
+#include "menus.h"
 
-int int_to_str(int x, char str[], int d)
+char *ftoa(float n, int afterpoint)
 {
-    int i = 0;
-    while (x) {
-        str[i++] = (x % 10) + '0';
-        x = x / 10;
-    }
-    while (i < d)
-        str[i++] = '0';
-    str[i] = '\0';
-    my_revstr(str);
-    return i;
-}
-
-void ftoa(float n, char* res, int afterpoint)
-{
-    int ipart = (int)n;
-    float fpart = n - (float)ipart;
-    int i = int_to_str(ipart, res, 0);
+    int ipart = ABS((int)n);
+    float fpart = ABS(n - (float)ipart);
+    char *ip = long_to_str(ipart);
+    char *fp = long_to_str(fpart * pow(10, afterpoint));
+    char *res;
 
     if (afterpoint != 0) {
-        res[i] = '.';
-        fpart = fpart * pow(10, afterpoint);
-        int_to_str((int)fpart, res + i + 1, afterpoint);
-    }
+        res = str_concat(3, ip, ".", fp);
+        free(ip);
+    } else
+        res = ip;
+    free(fp);
+    return res;
 }
 
 void append(char **str, char *buf, int is_free)
@@ -56,9 +47,9 @@ void init_graph(sfClock **c, sfText **t, win_t *w)
     if (!(*t)) {
         *c = sfClock_create();
         *t = sfText_create();
-        sfText_setFont(*t, sfFont_createFromFile("pusab.otf"));
+        sfText_setFont(*t, global_font());
     }
-    sfText_setCharacterSize(*t, size.x / 30.0);
+    sfText_setCharacterSize(*t, size.x / 27.0);
     sfText_setPosition(*t, (sfVector2f){size.x * 0.8, 0});
 }
 
@@ -68,17 +59,19 @@ void draw_fps(win_t *w)
     static sfText *t = NULL;
     static sfTime last_time = {0};
     float fps;
-    char *fps_str = malloc(7);
+    char *fps_str;
 
     init_graph(&c, &t, w);
     fps = 1000000.0 /
     (sfClock_getElapsedTime(c).microseconds - last_time.microseconds);
-    ftoa(fps, fps_str, 2);
+    fps_str = ftoa(fps, 2);
     last_time = sfClock_getElapsedTime(c);
     append(&fps_str, " FPS", 1);
     if (sfClock_getElapsedTime(c).microseconds > 500000) {
         sfText_setString(t, fps_str);
         sfClock_restart(c);
     }
-    sfRenderTexture_drawText(w->r_tex, t, NULL);
+    free(fps_str);
+    if (w->draw_fps)
+        sfRenderTexture_drawText(w->r_tex, t, NULL);
 }

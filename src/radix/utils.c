@@ -38,7 +38,7 @@ void triple_for(int *counts, size_t size, uint8_t *toSort, ...)
     for (int x = 1; x < bufsize; x++)
         counts[x] += counts[x - 1];
     for (size_t x = 0; x < size; x++) {
-        memcpy(buffer + type_size *
+        my_memcpy(buffer + type_size *
         counts[*(toSort + x * type_size + offset_in_struct + i)]++,
         toSort + x * type_size, type_size);
     }
@@ -49,7 +49,7 @@ void final_for(uint8_t *buffer, uint8_t *toSort, size_t sizes[2],
 size_t offset_in_struct)
 {
     if (sizeof(int) % 2)
-        memcpy(buffer, toSort, sizes[1] * sizes[0]);
+        my_memcpy(buffer, toSort, sizes[1] * sizes[0]);
     for (size_t x = 0; x < sizes[1]; x++)
         *(((uint8_t *)(toSort + (x * sizes[0]))) +
         offset_in_struct + sizeof(int) - 1) ^= 0b10000000;
@@ -67,7 +67,7 @@ size_t offset_in_struct, void *buffer2)
     for (size_t x = 0; x < sizes[1]; x++)
         *(toSort + x * sizes[0] + offset_in_struct + sizeof(int) - 1) ^= CONST;
     for (size_t i = 0; i < sizeof(int); i++) {
-        memset(counts, 0, sizeof(counts));
+        my_memset(counts, 0, sizeof(counts));
         triple_for(counts, sizes[1], toSort, buffer, sizes[0],
         offset_in_struct, i, bufsize);
         tmp = toSort;

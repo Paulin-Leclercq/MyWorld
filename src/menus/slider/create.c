@@ -46,14 +46,18 @@ sfSprite *draw_slider(slider_t *s)
 }
 
 sfRectangleShape *create_rectangle(sfVector2f size,
-sfColor fill, sfTexture const *tex)
+sfColor fill, sfTexture const *tex, ...)
 {
     sfRectangleShape *s = sfRectangleShape_create();
+    va_list va;
 
+    va_start(va, tex);
     if (!tex)
         sfRectangleShape_setFillColor(s, fill);
-    else
+    else {
         sfRectangleShape_setTexture(s, tex, 0);
+        sfRectangleShape_setTextureRect(s, va_arg(va, sfIntRect));
+    }
     sfRectangleShape_setSize(s, size);
     return s;
 }
@@ -69,11 +73,13 @@ sfVector2f bounds, int value, sfVector2f pos)
     s->value = value;
     s->size = size;
     s->but_size = (sfVector2f){size.x * 0.1, size.y};
-    s->cursor = init_button(global_texture(), cursor_rect,
+    s->cursor = init_button(global_texture(), slider_rects[0],
     (sfVector2f){0, 0}, s->but_size, "", NULL);
     center_sprite(s->cursor->sprite);
-    s->before_cursor = create_rectangle((sfVector2f){1, 1}, sfGreen, NULL);
-    s->after_cursor = create_rectangle((sfVector2f){1, 1}, sfGrey, NULL);
+    s->before_cursor = create_rectangle((sfVector2f){1, 1},
+    sfGreen, global_texture(), slider_rects[1]);
+    s->after_cursor = create_rectangle((sfVector2f){1, 1},
+    sfGrey, global_texture(), slider_rects[2]);
     s->pos = pos;
     rescale_slider(s, size, pos);
     return s;

@@ -10,33 +10,22 @@
 
 static void rescale_sounds(settings_t *se, window_t *win)
 {
-    sfSprite_setScale(se->sfx_plus->sprite, (sfVector2f)
-    {win->mode.width / settings_rects[0].width / 14.0, win->mode.width / settings_rects[0].width / 14.0});
-    sfSprite_setScale(se->sfx_minus->sprite, (sfVector2f)
-    {win->mode.width / settings_rects[0].width / 14.0, win->mode.width / settings_rects[0].width / 14.0});
-    sfSprite_setScale(se->music_plus->sprite, (sfVector2f)
-    {win->mode.width / settings_rects[0].width / 14.0, win->mode.width / settings_rects[0].width / 14.0});
-    sfSprite_setScale(se->music_minus->sprite, (sfVector2f)
-    {win->mode.width / settings_rects[0].width / 14.0, win->mode.width / settings_rects[0].width / 14.0});
-
-    /*
-    sfSprite_setScale(se->sfx_minus->sprite, (sfVector2f)
-    {win->mode.width / 1110.0, win->mode.width / 1110.0});
-    sfSprite_setScale(se->music_plus->sprite, (sfVector2f)
-    {win->mode.width / 1110.0, win->mode.width / 1110.0});
-    sfSprite_setScale(se->music_minus->sprite, (sfVector2f)
-    {win->mode.width / 1110.0, win->mode.width / 1110.0});*/
+    float val = win->mode.width / settings_rects[0].width / 14.0;
+    sfSprite_setScale(se->sfx_plus->sprite, (sfVector2f){val, val});
+    sfSprite_setScale(se->sfx_minus->sprite, (sfVector2f){val, val});
+    sfSprite_setScale(se->music_plus->sprite, (sfVector2f){val, val});
+    sfSprite_setScale(se->music_minus->sprite, (sfVector2f){val, val});
 }
 
 static void rescale_buttons(settings_t *se, window_t *win)
 {
-    float back_factor = win->mode.height / settings_rects[0].width / 12.0;
+    float bck_fac = win->mode.width / 12.0;
     set_sprite_size(se->framerate_button->sprite,
     (sfVector2f){win->mode.width / 2.2, win->mode.height / 5.0});
     set_sprite_size(se->res_button->sprite,
     (sfVector2f){win->mode.width / 2.2, win->mode.height / 5.0});
     set_sprite_size(se->back->sprite,
-    (sfVector2f){back_factor, back_factor});
+    (sfVector2f){bck_fac, bck_fac});
 }
 
 static void rescale_texts(settings_t *se, window_t *win)
@@ -63,7 +52,7 @@ static void rescale_texts(settings_t *se, window_t *win)
 
 void rescale_settings(settings_t *se, window_t *win)
 {
-    float check_scale = win->mode.width / settings_rects[0].height / 12.0;
+    float check_scale = win->mode.width / check_rect[0].height / 12.0;
 
     sfRenderTexture_destroy(se->rtex);
     se->rtex = sfRenderTexture_create(win->mode.width, win->mode.height, 0);
@@ -71,10 +60,6 @@ void rescale_settings(settings_t *se, window_t *win)
     (sfVector2f){win->mode.width, win->mode.height});
     scale_check_box(se->full_screen, (sfVector2f)
     {check_scale, check_scale});
-    // scale_check_box(se->full_screen, (sfVector2f)
-    // {win->mode.width / 936.0, win->mode.width / 936.0});
-    // scale_check_box(se->vsync, (sfVector2f)
-    // {win->mode.width / 936.0, win->mode.width / 936.0});
     scale_check_box(se->vsync, (sfVector2f)
     {check_scale, check_scale});
     rescale_sounds(se, win);

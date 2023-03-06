@@ -16,7 +16,7 @@ size_t trig_size, ...)
     va_start(list_arg, trig_size);
     if (mesh == NULL)
         return NULL;
-    memset(mesh, 0, sizeof(mesh_t));
+    my_memset(mesh, 0, sizeof(mesh_t));
     mesh->nb_vertxs = nb_vertxs;
     mesh->vertxs = mesh_vertxs;
     mesh->trig_size = trig_size;

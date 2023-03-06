@@ -26,32 +26,32 @@ static void move_buttons_se(settings_t *se, window_t *win)
 static void move_sfx(settings_t *se, window_t *win)
 {
     sfSprite_setPosition(se->sfx_minus->sprite, (sfVector2f)
-    {win->mode.width * 0.4, win->mode.height * 0.62});
+    {win->mode.width * 0.4, win->mode.height * 0.68});
     sfSprite_setPosition(se->sfx_plus->sprite, (sfVector2f)
-    {win->mode.width * 0.6, win->mode.height * 0.62});
+    {win->mode.width * 0.6, win->mode.height * 0.68});
     sfText_setPosition(se->sfx_vol_text, (sfVector2f)
-    {win->mode.width * 0.5, win->mode.height * 0.62});
+    {win->mode.width * 0.5, win->mode.height * 0.68});
     sfText_setPosition(se->sfx_text, (sfVector2f)
-    {win->mode.width * 0.3, win->mode.height * 0.62});
+    {win->mode.width * 0.3, win->mode.height * 0.68});
 }
 
 static void move_music(settings_t *se, window_t *win)
 {
     sfSprite_setPosition(se->music_minus->sprite, (sfVector2f)
-    {win->mode.width * 0.4, win->mode.height * 0.78});
+    {win->mode.width * 0.4, win->mode.height * 0.85});
     sfSprite_setPosition(se->music_plus->sprite, (sfVector2f)
-    {win->mode.width * 0.6, win->mode.height * 0.78});
+    {win->mode.width * 0.6, win->mode.height * 0.85});
     sfText_setPosition(se->music_vol_text, (sfVector2f)
-    {win->mode.width * 0.5, win->mode.height * 0.78});
+    {win->mode.width * 0.5, win->mode.height * 0.85});
     sfText_setPosition(se->music_text, (sfVector2f)
-    {win->mode.width * 0.3, win->mode.height * 0.78});
+    {win->mode.width * 0.3, win->mode.height * 0.85});
 }
 
 void move_settings(settings_t *se, window_t *win)
 {
-    sfVector2f pos = {win->mode.width / 22.0, win->mode.width / 22.0};
+    sfVector2f pos = {win->mode.width / 18.0, win->mode.width / 18.0};
 
-    sfSprite_setPosition(se->background, pos);
+    sfSprite_setPosition(se->background, (sfVector2f){0, 0});
     sfSprite_setPosition(se->back->sprite, pos);
     move_buttons_se(se, win);
     move_sfx(se, win);
