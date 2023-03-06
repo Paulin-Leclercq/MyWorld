@@ -2,8 +2,6 @@
 
 > This project is a random 3D map generator where you can travel around
 > and edit the world with a brush of a size you want.
-> For the moment only the lowering tool is available but others will be available soon.
-> Be careful, the launch map function is not working!
 
 ## Demo
 https://youtu.be/f5QDL-e1gMY
